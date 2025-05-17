@@ -223,6 +223,7 @@ input[type="checkbox"] {
   background-color: #007bff;
   color: white;
   border-color: #007bff;
+  font-weight: bold;
 }
 
 /* Ping Button
@@ -242,3 +243,18 @@ input[type="checkbox"] {
 .ping-button:hover {
   background-color: #005fd1;
 } */
+
+
+.today {
+  display: block;
+  max-width: 420px;
+  height: calc(100vh - 180px);
+  overflow-y: auto;
+  margin: auto;
+}
+
+
+.ping {
+  display: none;
+  max-height: 500px;
+}
