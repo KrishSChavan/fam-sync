@@ -63,10 +63,6 @@ app.get('/:name', function(req,res){
   res.sendFile(path.join(__dirname, './app/pages/index.html'));
 });
 
-app.get('/create-family', function(req,res){
-  res.sendFile(path.join(__dirname, './app/pages/create_family.html'));
-});
-
 
 
 
@@ -168,6 +164,46 @@ io.on("connection", function (socket) {
       return data;
     }
   }
+
+
+
+  socket.on('request-family-events', async() => {
+    socket.emit('family-events', await getFamilyEvents(), chavans.sort());
+  });
+
+  socket.on('request-family-tasks', async() => {
+    socket.emit('family-tasks', await getFamilyTasks(), chavans.sort());
+  });
+
+  socket.on('request-family-events-and-tasks', async() => {
+    socket.emit('family-events-and-tasks', await getFamilyEvents(), await getFamilyTasks(), chavans.sort());
+  });
+
+  async function getFamilyEvents() {
+    const { data, error } = await supabase
+      .from('events')
+      .select()
+
+    if (error) {
+      console.error(error);
+    } else {
+      return data;
+    }
+  }
+
+
+  async function getFamilyTasks() {
+    const { data, error } = await supabase
+      .from('tasks')
+      .select()
+
+    if (error) {
+      console.error(error);
+    } else {
+      return data;
+    }
+  }
+
 
 
 });
