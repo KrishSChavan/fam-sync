@@ -1,5 +1,12 @@
 const socket = io();
 
+
+const today_btn = document.getElementById('today-button');
+const ping_btn = document.getElementById('ping-button');
+const family_btn = document.getElementById('family-button');
+
+
+
 const me = window.location.pathname.split('/').join('');
 
 
@@ -40,7 +47,8 @@ socket.on('data-for-person', (events, tasks, cards) => {
   console.log(events, tasks, cards);
 
   if (events.length > 0) {
-    events.forEach((event) => {
+    sortedEvents = sortEventsForPerson(events);
+    sortedEvents.forEach((event) => {
       addEventToList(event.title, event.time);
     });
   }
@@ -56,4 +64,36 @@ socket.on('data-for-person', (events, tasks, cards) => {
       addCardToList(card.title, card.description);
     });
   }
+});
+
+
+
+
+let current_active_btn = today_btn;
+
+today_btn.addEventListener('click', () => {
+  today_btn.classList.add('active');
+  current_active_btn.classList.remove('active');
+  current_active_btn = today_btn;
+  show(today_wrapper);
+  hide(ping_wrapper);
+  hide(family_wrapper);
+});
+
+ping_btn.addEventListener('click', () => {
+  ping_btn.classList.add('active');
+  current_active_btn.classList.remove('active');
+  current_active_btn = ping_btn;
+  hide(today_wrapper);
+  show(ping_wrapper);
+  hide(family_wrapper);
+});
+
+family_btn.addEventListener('click', () => {
+  family_btn.classList.add('active');
+  current_active_btn.classList.remove('active');
+  current_active_btn = family_btn;
+  hide(today_wrapper);
+  hide(ping_wrapper);
+  show(family_wrapper);
 });
