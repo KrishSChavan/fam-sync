@@ -1,6 +1,7 @@
 const express = require("express");
 const socket = require("socket.io");
 const app = express();
+const webPush = require('web-push');
 
 require('dotenv').config();
 
@@ -71,6 +72,18 @@ const server = app.listen(process.env.PORT || 3000, () => {
 });
 
 var io = socket(server);
+
+
+
+
+
+webPush.setVapidDetails(`mailto:${process.env.PERSONAL_EMAIL}`, process.env.PUBLIC_VAPID_KEY, process.env.PRIVATE_VAPID_KEY);
+
+const users = {};         // { name: socketId }
+const subscriptions = {}; // { name: PushSubscription }
+
+
+
 
 
 io.on("connection", function (socket) {
@@ -204,6 +217,44 @@ io.on("connection", function (socket) {
     }
   }
 
+
+
+
+  socket.on('request-family-members', () => {
+    socket.emit('family-members', chavans.sort());
+  });
+
+
+
+
+
+  // Web Push Notifications
+
+
+  socket.on('register', (name) => {
+    console.log(`registered ${name}`);
+    users[name] = socket.id;
+    console.log(socket.id);
+  });
+
+  socket.on('save-subscription', (name, subscription) => {
+    console.log(`subscription for ${name} saved`);
+    subscriptions[name] = subscription;
+    console.log(subscription);
+  });
+
+  socket.on('pingUser', (to, title, message) => {
+    console.log(`trying to send to ${to} | ${title} --> ${message}`);
+    const subscription = subscriptions[to];
+    if (subscription) {
+      const payload = JSON.stringify({ title, body: message });
+      webPush.sendNotification(subscription, payload).catch(console.error);
+      console.log(`Noti sent to ${to}`);
+      socket.emit('registered-and-sent', to);
+    } else {
+      socket.emit('not-registered-for-notis', to);
+    }
+  });
 
 
 });
