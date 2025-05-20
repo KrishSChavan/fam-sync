@@ -40,18 +40,23 @@ app.use(limiter);
 const chavans = ["sandeep", "smita", "aarav", "krish"];
 
 app.get('/', function(req,res){
-  res.sendFile(path.join(__dirname, 'app', 'pages/signin.html'));
+  res.sendFile(path.join(__dirname, 'app', 'pages', 'signin.html'));
 });
 app.get('/signin', function(req,res){
-  res.sendFile(path.join(__dirname, 'app', 'pages/signin.html'));
+  res.sendFile(path.join(__dirname, 'app', 'pages', 'signin.html'));
 });
 
 app.get('/:name', function(req,res){
   // res.send("Welcome!");
 
+  const name = req.params.name;
+  
+  // Don't catch actual static files like /main.js or /favicon.ico
+  if (name.includes('.') || name === 'favicon.ico') return next();
+
   let match = false;
   chavans.forEach((person) => {
-    if (req.params.name == person.toLowerCase()) {
+    if (name == person.toLowerCase()) {
       match = true;
     }
   });
@@ -61,7 +66,7 @@ app.get('/:name', function(req,res){
   }
 
   res.setHeader("Content-Security-Policy", "default-src 'self'; connect-src 'self' https://api.weather.gov");
-  res.sendFile(path.join(__dirname, 'app', 'pages/index.html'));
+  res.sendFile(path.join(__dirname, 'app', 'pages', 'index.html'));
 });
 
 
