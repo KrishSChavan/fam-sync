@@ -26,7 +26,9 @@ const limiter = rateLimit({
 });
 
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname,'app')));
+// app.use(express.static(path.join(__dirname,'app')));
+app.use('/css', express.static(path.join(__dirname, 'app/css')));
+app.use('/js', express.static(path.join(__dirname, 'app/js')));
 app.use(helmet());
 app.use(limiter);
 
