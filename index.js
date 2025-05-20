@@ -40,10 +40,10 @@ app.use(limiter);
 const chavans = ["sandeep", "smita", "aarav", "krish"];
 
 app.get('/', function(req,res){
-  res.sendFile(path.join(__dirname, './app/pages/signin.html'));
+  res.sendFile(path.join(__dirname, './app', 'pages/signin.html'));
 });
 app.get('/signin', function(req,res){
-  res.sendFile(path.join(__dirname, './app/pages/signin.html'));
+  res.sendFile(path.join(__dirname, './app', 'pages/signin.html'));
 });
 
 app.get('/:name', function(req,res){
@@ -61,7 +61,7 @@ app.get('/:name', function(req,res){
   }
 
   res.setHeader("Content-Security-Policy", "default-src 'self'; connect-src 'self' https://api.weather.gov");
-  res.sendFile(path.join(__dirname, './app/pages/index.html'));
+  res.sendFile(path.join(__dirname, './app', 'pages/index.html'));
 });
 
 
