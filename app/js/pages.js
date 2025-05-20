@@ -27,6 +27,9 @@ function show(elem) {
   if (elem == family_wrapper) {
     socket.emit('request-family-events-and-tasks');
   }
+  if (elem == ping_wrapper) {
+    socket.emit('request-family-members');
+  }
   elem.style.display = "block";
 }
 
