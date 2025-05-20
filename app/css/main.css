@@ -256,5 +256,5 @@ input[type="checkbox"] {
 
 .ping {
   display: none;
-  max-height: 500px;
+  max-height: calc(100vh - 200px);
 }
