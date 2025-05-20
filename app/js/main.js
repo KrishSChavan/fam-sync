@@ -5,9 +5,12 @@ const today_btn = document.getElementById('today-button');
 const ping_btn = document.getElementById('ping-button');
 const family_btn = document.getElementById('family-button');
 
-
-
-const me = window.location.pathname.split('/').join('');
+let me;
+window.addEventListener('load', () => {
+  me = window.location.pathname.split('/').join('');
+  register();
+  socket.emit('request-data-for-person', me);
+});
 
 
 const my_events_list = document.getElementById('my-events');
@@ -40,7 +43,6 @@ function addCardToList(title, description) {
 }
 
 
-socket.emit('request-data-for-person', me);
 
 socket.on('data-for-person', (events, tasks, cards) => {
 
@@ -84,7 +86,12 @@ ping_btn.addEventListener('click', () => {
   ping_btn.classList.add('active');
   current_active_btn.classList.remove('active');
   current_active_btn = ping_btn;
+  document.getElementById('title').value = "";
+  document.getElementById('message').value = "";
   hide(today_wrapper);
+  hide(noti_sent);
+  hide(ping_error);
+  show(ping_form);
   show(ping_wrapper);
   hide(family_wrapper);
 });
